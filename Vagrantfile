@@ -13,18 +13,17 @@ bash -c 'echo LC_ALL="en_US.UTF-8" >> /etc/default/locale'
 
 wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | apt-key add -
 sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
-
-wget -q -O - https://get.docker.io/gpg | apt-key add -
-sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
-
 apt-get -q update
 apt-get -y upgrade
 
+# Install Jenkins
 useradd -u 45678 -g 65534 -m -d /var/lib/jenkins -s /bin/bash jenkins
 apt-get -y install \
-         lxc-docker # Install Docker
-         jenkins # Install Jenkins
+         jenkins \
          build-essential wget curl git-core jq
+
+# Install Docker
+wget -qO- https://get.docker.com/ | sh
 
 adduser vagrant docker
 adduser jenkins docker
@@ -52,8 +51,8 @@ Vagrant.configure('2') do |config|
   # $ vagrant plugin install --plugin-source https://rubygems.org/ --plugin-prerelease vagrant-vbguest
   config.vbguest.auto_update = false
 
-  config.vm.box = 'utopic64'
-  config.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/utopic/current/utopic-server-cloudimg-i386-vagrant-disk1.box'
+  config.vm.box = 'trusty64'
+  config.vm.box_url = '/Users/sgyk/local/vagrant/box/trusty-server-cloudimg-amd64-vagrant-disk1.box'
 
   config.vm.network :forwarded_port, guest: 8080, host:8888
 

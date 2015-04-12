@@ -1,4 +1,4 @@
-FROM ubuntu:14.10
+FROM ubuntu:14.04
 MAINTAINER shigeyuki.fujishima <shigeyuki.fujishima_at_gmail.com>
 
 # Make workspace
