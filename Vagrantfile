@@ -4,6 +4,11 @@
 $script = <<SCRIPT
 set -x
 
+# Change JP Repositoy
+sed -i".bk" -e \
+        "s|http://security.ubuntu.com/ubuntu|http://ftp.jaist.ac.jp/pub/Linux/ubuntu/|g" \
+        /etc/apt/sources.list
+
 sudo bash -c 'echo LC_ALL="en_US.UTF-8" >> /etc/default/locale'
 
 wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
@@ -15,14 +20,12 @@ sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.
 sudo apt-get -q update
 sudo apt-get -y upgrade
 
-sudo apt-get -y install build-essential wget curl git-core jq
-
-# Install Jenkins
 sudo useradd -u 45678 -g 65534 -m -d /var/lib/jenkins -s /bin/bash jenkins
-sudo apt-get -y install jenkins
+sudo apt-get -y install \
+         lxc-docker # Install Docker
+         jenkins # Install Jenkins
+         build-essential wget curl git-core jq
 
-# Install Docker
-sudo apt-get -y install lxc-docker
 sudo adduser vagrant docker
 sudo adduser jenkins docker
 sudo service docker restart
