@@ -9,29 +9,29 @@ sed -i".bk" -e \
         "s|http://security.ubuntu.com/ubuntu|http://ftp.jaist.ac.jp/pub/Linux/ubuntu/|g" \
         /etc/apt/sources.list
 
-sudo bash -c 'echo LC_ALL="en_US.UTF-8" >> /etc/default/locale'
+bash -c 'echo LC_ALL="en_US.UTF-8" >> /etc/default/locale'
 
-wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
-sudo sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
+wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | apt-key add -
+sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
 
-wget -q -O - https://get.docker.io/gpg | sudo apt-key add -
-sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
+wget -q -O - https://get.docker.io/gpg | apt-key add -
+sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
 
-sudo apt-get -q update
-sudo apt-get -y upgrade
+apt-get -q update
+apt-get -y upgrade
 
-sudo useradd -u 45678 -g 65534 -m -d /var/lib/jenkins -s /bin/bash jenkins
-sudo apt-get -y install \
+useradd -u 45678 -g 65534 -m -d /var/lib/jenkins -s /bin/bash jenkins
+apt-get -y install \
          lxc-docker # Install Docker
          jenkins # Install Jenkins
          build-essential wget curl git-core jq
 
-sudo adduser vagrant docker
-sudo adduser jenkins docker
-sudo service docker restart
+adduser vagrant docker
+adduser jenkins docker
+service docker restart
 
 # Install jenkins plugins
-cat <<EOL | sudo -u jenkins xargs -P 5 -n 1 wget -nv -T 60 -t 3 -P /var/lib/jenkins/plugins
+cat <<EOL | su jenkins -c "xargs -P 5 -n 1 wget -nv -T 60 -t 3 -P /var/lib/jenkins/plugins"
 https://updates.jenkins-ci.org/download/plugins/git-client/1.4.6/git-client.hpi
 https://updates.jenkins-ci.org/download/plugins/git/2.0/git.hpi
 https://updates.jenkins-ci.org/download/plugins/scm-api/0.2/scm-api.hpi
@@ -39,13 +39,13 @@ https://updates.jenkins-ci.org/download/plugins/ansicolor/0.3.1/ansicolor.hpi
 EOL
 
 # Setup jenkins jobs
-sudo -u jenkins cp -R /vagrant/jobs/* /var/lib/jenkins/jobs/
+su jenkins -c "cp -R /vagrant/jobs/* /var/lib/jenkins/jobs/"
 
 # Restart jenkins service
-sudo service jenkins restart
+service jenkins restart
 
 # Build Docker image
-sudo docker build -t jenkins-with-docker/nodejs /vagrant
+docker build -t jenkins-with-docker/nodejs /vagrant
 SCRIPT
 
 Vagrant.configure('2') do |config|
