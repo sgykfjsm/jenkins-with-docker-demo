@@ -47,7 +47,7 @@ SCRIPT
 
 Vagrant.configure('2') do |config|
   # $ vagrant plugin install --plugin-source https://rubygems.org/ --plugin-prerelease vagrant-vbguest
-  config.vbguest.auto_update = true
+  config.vbguest.auto_update = false
 
   config.vm.box = 'utopic64'
   config.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/utopic/current/utopic-server-cloudimg-i386-vagrant-disk1.box'
