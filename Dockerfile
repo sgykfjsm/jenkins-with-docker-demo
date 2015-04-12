@@ -1,8 +1,13 @@
-FROM ubuntu:12.04
+FROM ubuntu:14.10
 MAINTAINER shigeyuki.fujishima <shigeyuki.fujishima_at_gmail.com>
 
 # Make workspace
 RUN mkdir /workspace
+
+# Change JP Repositoy
+RUN sed -i".bk" -e \
+        "s|http://security.ubuntu.com/ubuntu|http://ftp.jaist.ac.jp/pub/Linux/ubuntu/|g" \
+        /etc/apt/sources.list
 
 RUN apt-get -q update; apt-get -y upgrade
 RUN apt-get -y install build-essential sudo curl wget git-core
