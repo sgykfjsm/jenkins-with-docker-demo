@@ -41,8 +41,8 @@ for ((i = 0; i &lt; &quot;${#VERSIONS[@]}&quot;; i++)); do
     _WORKSPACE=&quot;${WORKSPACE}.${BUILD_NUMBER}.${VERSION}&quot;
     cp -R &quot;${WORKSPACE}&quot; &quot;${_WORKSPACE}&quot;
 
-    CONTAINER_ID=$(docker run -d -v &quot;${_WORKSPACE}&quot;:/workspace -w /workspace -u worker -e &quot;HOME=/home/worker&quot; jenkins-with-docker/nodejs &quot;$(cat &lt;&lt;EOL
-source /.nvm/nvm.sh
+    CONTAINER_ID=$(docker run -d -v &quot;${_WORKSPACE}&quot;:/workspace -w /workspace jenkins-with-docker/nodejs &quot;$(cat &lt;&lt;EOL
+source /opt/nvm/nvm.sh
 nvm use &quot;${VERSION}&quot;
 npm install
 npm test
